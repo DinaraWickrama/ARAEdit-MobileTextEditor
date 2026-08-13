@@ -5,6 +5,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontFamily
 
 /**
  * Line/pattern based highlighter for common Markdown constructs.
@@ -34,9 +35,9 @@ object MarkdownHighlighter {
         return AnnotatedString.Builder(sourceText).apply {
             applyPattern(this, sourceText, CODE_FENCE_REGEX, SpanStyle(color = CODE_COLOR))
             applyPattern(this, sourceText, HEADER_REGEX, SpanStyle(color = HEADER_COLOR, fontWeight = FontWeight.Bold))
-            applyPattern(this, sourceText, BLOCKQUOTE_REGEX, SpanStyle(color = QUOTE_COLOR, fontStyle = FontStyle.Italic))
+            applyPattern(this, sourceText, BLOCKQUOTE_REGEX, SpanStyle(color = QUOTE_COLOR, fontStyle = FontStyle.Italic,fontFamily = FontFamily.Serif))
             applyPattern(this, sourceText, BOLD_REGEX, SpanStyle(color = BOLD_COLOR, fontWeight = FontWeight.Bold))
-            applyPattern(this, sourceText, ITALIC_REGEX, SpanStyle(fontStyle = FontStyle.Italic))
+            applyPattern(this, sourceText, ITALIC_REGEX, SpanStyle(fontStyle = FontStyle.Italic, fontFamily = FontFamily.Serif))
             applyPattern(this, sourceText, INLINE_CODE_REGEX, SpanStyle(color = CODE_COLOR))
             applyPattern(this, sourceText, LINK_REGEX, SpanStyle(color = LINK_COLOR, fontWeight = FontWeight.Medium))
             applyPattern(this, sourceText, LIST_ITEM_REGEX, SpanStyle(color = LIST_COLOR))
