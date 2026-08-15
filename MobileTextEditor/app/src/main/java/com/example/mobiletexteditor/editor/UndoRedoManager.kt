@@ -43,6 +43,11 @@ class UndoRedoManager(private val maxHistory: Int = 200) {
         current = redoStack.removeLast()
         return current
     }
+    /** Updates the live buffer WITHOUT creating a new undo checkpoint — used while
+     *  the user is still in the middle of typing a single word. */
+    fun updateLiveText(newText: String) {
+        current = newText
+    }
 
     fun currentText(): String = current
 }

@@ -42,7 +42,8 @@ color androidx_core_ripple_material_light
 color androidx_core_secondary_text_default_material_light
 color call_notification_answer_color
 color call_notification_decline_color
-color ic_launcher_background
+color my_icon_background
+color my_logo_background
 color notification_action_color_filter
 color notification_icon_bg_color
 color vector_tint_color
@@ -69,6 +70,7 @@ dimen notification_small_icon_size_as_large
 dimen notification_subtext_size
 dimen notification_top_pad
 dimen notification_top_pad_large_text
+drawable app_icon_background
 drawable ic_call_answer
 drawable ic_call_answer_low
 drawable ic_call_answer_video
@@ -76,7 +78,8 @@ drawable ic_call_answer_video_low
 drawable ic_call_decline
 drawable ic_call_decline_low
 drawable ic_launcher_background
-drawable ic_launcher_foreground
+drawable my_icon_background
+drawable my_logo_background
 drawable notification_action_background
 drawable notification_bg
 drawable notification_bg_low
@@ -188,9 +191,17 @@ layout notification_template_custom_big
 layout notification_template_icon_group
 layout notification_template_part_chronometer
 layout notification_template_part_time
+mipmap app_icon
+mipmap app_icon_foreground
+mipmap app_icon_round
 mipmap ic_launcher
 mipmap ic_launcher_foreground
 mipmap ic_launcher_round
+mipmap my_icon_foreground
+mipmap my_icon_round
+mipmap my_logo
+mipmap my_logo_foreground
+mipmap my_logo_round
 string androidx_startup
 string app_name
 string call_notification_answer_action

@@ -13,9 +13,24 @@ import com.example.mobiletexteditor.ui.EditorScreen
 import com.example.mobiletexteditor.ui.EditorViewModel
 import com.example.mobiletexteditor.ui.HomeScreen
 import com.example.mobiletexteditor.versioncontrol.DiffViewScreen
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.ui.graphics.Color
 
 private enum class Screen { HOME, EDITOR, HISTORY }
-
+private val ARAEditColors = lightColorScheme(
+    primary = Color(0xFF1565C0),
+    onPrimary = Color.White,
+    primaryContainer = Color(0xFFBBDEFB),
+    onPrimaryContainer = Color(0xFF0D47A1),
+    secondary = Color(0xFF1976D2),
+    onSecondary = Color.White,
+    background = Color.White,
+    onBackground = Color(0xFF1A1A1A),
+    surface = Color.White,
+    onSurface = Color(0xFF1A1A1A),
+    surfaceVariant = Color(0xFFE3F2FD),
+    onSurfaceVariant = Color(0xFF1A1A1A)
+)
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +58,7 @@ class MainActivity : ComponentActivity() {
                 uri?.let { viewModel.saveAs(it) }
             }
 
-            MaterialTheme {
+            MaterialTheme (colorScheme = ARAEditColors){
                 Surface(modifier = Modifier) {
                     when (currentScreen) {
                         Screen.HOME -> HomeScreen(

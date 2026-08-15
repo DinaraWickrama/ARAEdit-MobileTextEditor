@@ -191,8 +191,31 @@ class EditorViewModel(application: Application) : AndroidViewModel(application) 
 
     fun onTextChanged(newText: String) {
         if (_uiState.value.isReadOnly) return
-        undoRedo.recordEdit(newText)
+        val oldText = _uiState.value.bufferText
+        val insertedChar = singleCharacterInserted(oldText, newText)
+        val isMidWordTyping = insertedChar != null && (insertedChar.isLetterOrDigit() || insertedChar == '_')
+
+        if (isMidWordTyping) {
+            // Still typing the same word — keep the buffer in sync, but don't
+            // create a new undo checkpoint until the word actually finishes.
+            undoRedo.updateLiveText(newText)
+        } else {
+            // A word just finished (space/punctuation), or this was a deletion
+            // or paste — commit a proper undo checkpoint.
+            undoRedo.recordEdit(newText)
+        }
         _uiState.value = _uiState.value.copy(bufferText = newText)
+    }
+
+    /** Returns the single character that was inserted if newText is exactly
+     *  oldText with one character added somewhere, otherwise null (covers
+     *  deletions, pastes, and multi-character changes). */
+    private fun singleCharacterInserted(oldText: String, newText: String): Char? {
+        if (newText.length != oldText.length + 1) return null
+        var i = 0
+        while (i < oldText.length && i < newText.length && oldText[i] == newText[i]) i++
+        if (newText.substring(i + 1) != oldText.substring(i)) return null
+        return newText[i]
     }
 
     fun undo() {

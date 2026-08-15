@@ -1,3 +1,4 @@
 <resources>
-    <color name="ic_launcher_background">#1E1E2E</color>
+    <color name="my_icon_background">#1E1E2E</color>
+    <color name="my_logo_background">#1E1E2E</color>
 </resources>

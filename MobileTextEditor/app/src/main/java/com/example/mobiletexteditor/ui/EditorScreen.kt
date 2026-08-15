@@ -29,6 +29,8 @@ import com.example.mobiletexteditor.highlighting.MarkdownHighlighter
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,6 +45,7 @@ fun EditorScreen(
     var showSaveLabelDialog by remember { mutableStateOf(false) }
     var saveLabelInput by remember { mutableStateOf("") }
     var showSaveAsDialog by remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }
 
     if (uiState.recoveryAvailable) {
         AlertDialog(
@@ -109,26 +112,33 @@ fun EditorScreen(
             onCancel = { showSaveAsDialog = false }
         )
     }
+    LaunchedEffect(Unit) {
+        // A small delay or yield ensures the component is fully placed in the layout 
+        // before requesting focus, avoiding "FocusRequester is not initialized" errors.
+        kotlinx.coroutines.delay(100)
+        try {
+            focusRequester.requestFocus()
+        } catch (_: Exception) {
+            // If focus fails, the user can still tap manually.
+        }
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(uiState.displayName + if (uiState.isReadOnly) "  (read-only)" else "") },
+                title = {
+                    Text(
+                        uiState.displayName + if (uiState.isReadOnly) "  (read-only)" else "",
+                        maxLines = 1,
+                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onBackToHome) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back to Home")
                     }
                 },
                 actions = {
-                    IconButton(onClick = { viewModel.toggleSearch() }) {
-                        Icon(Icons.Filled.Search, contentDescription = "Search")
-                    }
-                    IconButton(onClick = { viewModel.setReadOnly(!uiState.isReadOnly) }) {
-                        Icon(
-                            if (uiState.isReadOnly) Icons.Filled.Lock else Icons.Filled.LockOpen,
-                            contentDescription = if (uiState.isReadOnly) "Unlock file" else "Lock file as read-only"
-                        )
-                    }
                     IconButton(onClick = { viewModel.undo() }) {
                         Icon(Icons.AutoMirrored.Filled.Undo, contentDescription = "Undo")
                     }
@@ -165,13 +175,26 @@ fun EditorScreen(
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {
 
             Row(
-                modifier = Modifier.fillMaxWidth().padding(8.dp),
-                horizontalArrangement = Arrangement.End,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Word wrap")
-                Spacer(Modifier.width(8.dp))
-                Switch(checked = uiState.wordWrapEnabled, onCheckedChange = { viewModel.toggleWordWrap() })
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    IconButton(onClick = { viewModel.toggleSearch() }) {
+                        Icon(Icons.Filled.Search, contentDescription = "Search")
+                    }
+                    IconButton(onClick = { viewModel.setReadOnly(!uiState.isReadOnly) }) {
+                        Icon(
+                            if (uiState.isReadOnly) Icons.Filled.Lock else Icons.Filled.LockOpen,
+                            contentDescription = if (uiState.isReadOnly) "Unlock file" else "Lock file as read-only"
+                        )
+                    }
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("Word wrap")
+                    Spacer(Modifier.width(8.dp))
+                    Switch(checked = uiState.wordWrapEnabled, onCheckedChange = { viewModel.toggleWordWrap() })
+                }
             }
 
             if (uiState.isSearchVisible) {
@@ -251,7 +274,11 @@ fun EditorScreen(
                         },
                         readOnly = uiState.isReadOnly,
                         visualTransformation = combinedTransformation,
-                        modifier = Modifier.fillMaxWidth().padding(8.dp)
+                        textStyle = androidx.compose.ui.text.TextStyle(fontSynthesis = androidx.compose.ui.text.font.FontSynthesis.All),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .focusRequester(focusRequester)
                     )
                 }
             } else {
@@ -270,7 +297,10 @@ fun EditorScreen(
                         },
                         readOnly = uiState.isReadOnly,
                         visualTransformation = combinedTransformation,
-                        modifier = Modifier.padding(8.dp)
+                        textStyle = androidx.compose.ui.text.TextStyle(fontSynthesis = androidx.compose.ui.text.font.FontSynthesis.All),
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .focusRequester(focusRequester)
                     )
                 }
             }
