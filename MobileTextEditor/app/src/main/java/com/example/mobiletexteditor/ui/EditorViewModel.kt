@@ -383,8 +383,10 @@ class EditorViewModel(application: Application) : AndroidViewModel(application) 
     fun highlightedText(): AnnotatedString {
         val text = _uiState.value.bufferText
         return when (_uiState.value.fileType) {
-            FileType.KOTLIN -> KotlinHighlighter.highlight(text)
-            FileType.MARKDOWN -> MarkdownHighlighter.highlight(text)
+            FileType.KOTLIN -> KotlinHighlighter.highlight(text)   // kotlin highlight
+            FileType.MARKDOWN -> MarkdownHighlighter.highlight(text) // markdown highlight
+            FileType.HTML -> HtmlHighlighter.highlight(text)      // add html highlight
+            FileType.CSS -> CssHighlighter.highlight(text)        // add css highlight
             else -> AnnotatedString(text)
         }
     }
