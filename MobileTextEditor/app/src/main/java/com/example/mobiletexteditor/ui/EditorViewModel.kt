@@ -13,6 +13,8 @@ import com.example.mobiletexteditor.editor.FileManager
 import com.example.mobiletexteditor.editor.UndoRedoManager
 import com.example.mobiletexteditor.highlighting.KotlinHighlighter
 import com.example.mobiletexteditor.highlighting.MarkdownHighlighter
+import com.example.mobiletexteditor.highlighting.HtmlHighlighter
+import com.example.mobiletexteditor.highlighting.CssHighlighter
 import com.example.mobiletexteditor.versioncontrol.DeltaManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
